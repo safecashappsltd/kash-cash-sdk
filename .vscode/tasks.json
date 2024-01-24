@@ -1,0 +1,31 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "RunScriptOnSave",
+        "type": "shell",
+        "command": "npm",
+        "args": ["run", "link"],
+        "group": {
+          "kind": "build",
+          "isDefault": true
+        },
+        "presentation": {
+          "reveal": "always",
+          "panel": "new"
+        },
+        "isBackground": false,
+        "problemMatcher": {
+          "owner": "custom",
+          "fileLocation": ["relative", "${workspaceFolder}"],
+          "pattern": {
+            "regexp": "^(.*)$",
+            "message": 1
+          }
+        },
+        "runOptions": {
+          "runOn": "save"
+        }
+      }
+    ]
+  }
