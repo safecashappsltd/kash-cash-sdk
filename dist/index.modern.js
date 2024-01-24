@@ -1,5 +1,7 @@
 import React__default, { useState, useEffect, createElement } from 'react';
 import axios from 'axios';
+import Modal from 'react-modal';
+import QRCode from 'react-qr-code';
 
 function _extends() {
   _extends = Object.assign ? Object.assign.bind() : function (target) {
@@ -109,11 +111,11 @@ var ButtonComponent = function ButtonComponent(_ref) {
   var color = buttonStyle === Style.BRIGHT;
   var type = buttonType === Type.WITHOUT_ICON;
   var styles = {
-    color: color ? "white" : "black",
-    backgroundColor: color ? "orange" : "white",
+    color: color ? 'white' : 'black',
+    backgroundColor: color ? 'orange' : 'white',
     borderRadius: type ? '8px' : '25px',
-    padding: "10px",
-    fontFamily: "Sans-Serif"
+    padding: '10px',
+    fontFamily: 'Sans-Serif'
   };
   return React__default.createElement("div", null, React__default.createElement("button", {
     style: _extends({}, styles, customButtonStyle),
@@ -532,6 +534,65 @@ var useCreateTransaction = function useCreateTransaction(sdkConfig, externalId, 
   };
 };
 
+var QRCodeModal = function QRCodeModal(props) {
+  var isModalShow = props.isModalShow,
+    closeModal = props.closeModal,
+    qrValue = props.qrValue,
+    manualCode = props.manualCode;
+  return React__default.createElement("div", null, React__default.createElement(Modal, {
+    isOpen: isModalShow,
+    onAfterOpen: function onAfterOpen() {},
+    onRequestClose: closeModal,
+    style: customStyles,
+    contentLabel: 'Payment'
+  }, React__default.createElement("div", {
+    style: {
+      background: 'white',
+      padding: '16px',
+      borderRadius: 10
+    }
+  }, React__default.createElement("button", {
+    onClick: closeModal,
+    style: {
+      position: 'absolute',
+      right: 10,
+      top: 10,
+      borderWidth: 0,
+      backgroundColor: 'transparent'
+    }
+  }, React__default.createElement("text", {
+    style: {
+      fontSize: 18,
+      fontWeight: 'bolder'
+    }
+  }, "X")), React__default.createElement(QRCode, {
+    value: qrValue
+  }), React__default.createElement("div", {
+    style: {
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      padding: '16px'
+    }
+  }, React__default.createElement("text", {
+    style: {
+      fontSize: 22,
+      fontWeight: 'bold'
+    }
+  }, 'Code: ' + manualCode)))));
+};
+var customStyles = {
+  content: {
+    top: '50%',
+    left: '50%',
+    right: 'auto',
+    bottom: 'auto',
+    marginRight: '-50%',
+    transform: 'translate(-50%, -50%)',
+    zIndex: 999
+  }
+};
+
 var DEFAULT_POLLING_INTERVAL = 5000;
 var EMPTY_STRING = '';
 var PROCESSING = 'בתהליך...';
@@ -564,10 +625,11 @@ var KashCashInit = function KashCashInit(config) {
   sdkConfig.businessId = businessId;
   sdkConfig.posVendorId = posVendorId;
   sdkConfig.version = version;
-  sdkConfig.pollingInterval = pollingInterval ? pollingInterval : DEFAULT_POLLING_INTERVAL;
-  sdkConfig.merchantToken = merchantToken, sdkConfig.customCreateTransactionFunction = customCreateTransactionFunction;
-  sdkConfig.buttonStyle = buttonStyle ? buttonStyle : Style.BRIGHT;
-  sdkConfig.buttonType = buttonType ? buttonType : Type.WITH_ICON;
+  sdkConfig.pollingInterval = pollingInterval;
+  sdkConfig.merchantToken = merchantToken;
+  sdkConfig.customCreateTransactionFunction = customCreateTransactionFunction;
+  sdkConfig.buttonStyle = buttonStyle;
+  sdkConfig.buttonType = buttonType;
 };
 var KashCashPay = function KashCashPay(_ref) {
   var customButtonStyle = _ref.customButtonStyle,
@@ -581,12 +643,24 @@ var KashCashPay = function KashCashPay(_ref) {
     createTransaction = _useCreateTransaction.createTransaction,
     closeModal = _useCreateTransaction.closeModal,
     stopInterval = _useCreateTransaction.stopInterval,
+    isModalShow = _useCreateTransaction.isModalShow,
     isProcessing = _useCreateTransaction.isProcessing,
+    qrCode = _useCreateTransaction.qrCode,
+    manualCode = _useCreateTransaction.manualCode,
     transactionId = _useCreateTransaction.transactionId,
     isStatusFinal = _useCreateTransaction.isStatusFinal;
+  var manualCloseModal = function manualCloseModal() {
+    closeModal();
+    cancelTransaction({
+      transactionId: transactionId,
+      auth: sdkConfig.merchantToken,
+      businessId: sdkConfig.businessId
+    });
+  };
   useEffect(function () {
     switch (isStatusFinal) {
       case TransactionStatus.CANCELED:
+        manualCloseModal();
       case TransactionStatus.LIMITED:
       case TransactionStatus.REJECTED:
         closeModal();
@@ -610,6 +684,11 @@ var KashCashPay = function KashCashPay(_ref) {
     title: isProcessing ? PROCESSING : 'תשלום בקשקאש',
     onPress: createTransaction,
     customButtonStyle: customButtonStyle
+  }), createElement(QRCodeModal, {
+    manualCode: manualCode,
+    qrValue: qrCode,
+    isModalShow: isModalShow,
+    closeModal: manualCloseModal
   }));
 };
 

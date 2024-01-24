@@ -1,4 +1,4 @@
-import { CreateResponse, TransactionStatus } from "../entities/utils/errorMassages";
+import { CreateResponse, TransactionStatus } from '../entities/utils/errorMassages';
 export declare type IError = {
     e: {
         message: string;
