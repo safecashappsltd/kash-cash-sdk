@@ -6,10 +6,10 @@ To install the React Kash Cash SDK, use either npm or yarn:
 
 ```bash
 # Using npm
-npm install react-native-kash-cash-sdk
+npm install kash-cash-sdk
 
 # Using yarn
-yarn add react-native-kash-cash-sdk
+yarn add kash-cash-sdk
 ```
 
 ## Implementation
@@ -20,7 +20,7 @@ In your application code, import the SDK and initialize it with your configurati
 
 ```javascript
 // Import the necessary types and the SDK
-import { KashCashInit, Style, Type } from 'react-native-kash-cash-sdk';
+import { KashCashInit, Style, Type } from 'kash-cash-sdk';
 
 // Define your configuration data
 const dataToInitApi = {
@@ -45,7 +45,7 @@ Next, add the Kash Cash button to your React Native component. Customize the but
 
 ```javascript
 // Import the necessary components and types
-import { KashCashButton, Style, Type } from 'react-native-kash-cash-sdk';
+import { KashCashButton, Style, Type } from 'kash-cash-sdk';
 
 // Your component code...
 // ...
