@@ -1,4 +1,4 @@
-const url = 'https://stage-api.safecashapps.com/api/external/v1/'
+const url = 'https://prod-api.safecashapps.com/api/external/v1/'
 
 const endPoints = {
   login: 'login',

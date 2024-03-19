@@ -1,4 +1,4 @@
-declare const url = "https://stage-api.safecashapps.com/api/external/v1/";
+declare const url = "https://prod-api.safecashapps.com/api/external/v1/";
 declare const endPoints: {
     login: string;
     create: string;

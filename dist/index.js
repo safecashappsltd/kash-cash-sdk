@@ -21,7 +21,7 @@ function _extends() {
   return _extends.apply(this, arguments);
 }
 
-var url = 'https://stage-api.safecashapps.com/api/external/v1/';
+var url = 'https://prod-api.safecashapps.com/api/external/v1/';
 var endPoints = {
   login: 'login',
   create: 'request/create',
